@@ -140,7 +140,7 @@ export default function DailyRecordMedication() {
             ) : (
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
                 <p className="text-yellow-800 text-sm sm:text-base">
-                  No tienes medicamentos registrados. Puedes agregarlos en "Mis Medicamentos".
+                  No tienes medicamentos registrados. Puedes agregarlos en &quot;Mis Medicamentos&quot;.
                 </p>
               </div>
             )}

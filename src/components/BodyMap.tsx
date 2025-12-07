@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { FaTimes } from 'react-icons/fa'
 
 interface BodyMapProps {
@@ -227,14 +228,16 @@ export default function BodyMap({ selectedAreas, onAreaClick, viewMode = 'fronta
         style={{ aspectRatio: '1/2', minHeight: '500px' }}
       >
         <div className="relative w-full h-full bg-white rounded-xl overflow-hidden shadow-inner">
-          <img
+          <Image
             src={bodyImageUrl}
             alt={`Cuerpo humano - Vista ${viewMode === 'frontal' ? 'frontal' : viewMode === 'posterior' ? 'posterior' : 'lateral'}`}
-            className={`w-full h-full object-contain transition-opacity duration-300 ${
+            fill
+            className={`object-contain transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setImageLoaded(true)}
             style={{ filter: 'brightness(1.05) contrast(1.1)' }}
+            sizes="(max-width: 768px) 100vw, 500px"
           />
           
           {!imageLoaded && (
