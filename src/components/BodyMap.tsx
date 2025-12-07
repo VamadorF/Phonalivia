@@ -210,7 +210,7 @@ export default function BodyMap({ selectedAreas, onAreaClick, viewMode = 'fronta
   const bodyImageUrl = getImageUrl()
 
   useEffect(() => {
-    const img = new Image()
+    const img = new window.Image()
     img.onload = () => {
       setImageLoaded(true)
     }
