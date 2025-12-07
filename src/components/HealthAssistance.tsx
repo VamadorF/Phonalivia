@@ -98,7 +98,7 @@ export default function HealthAssistance({ moodPattern = 'neutral', painLevel = 
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-gray-800">Mensaje del día</h3>
         </div>
-        <p className="text-base sm:text-lg text-gray-700 italic">"{randomPhrase}"</p>
+        <p className="text-base sm:text-lg text-gray-700 italic">&quot;{randomPhrase}&quot;</p>
       </motion.div>
 
       <motion.div
