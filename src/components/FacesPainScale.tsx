@@ -77,16 +77,15 @@ const faces = [
   },
 ]
 
-const PainFace = ({ Icon, color, size = 80, selected }: { Icon: React.ComponentType<any>; color: string; size?: number; selected: boolean }) => {
-  const faceSize = size
-  const iconSize = faceSize * 0.7
+const PainFace = ({ Icon, color, size, selected }: { Icon: React.ComponentType<any>; color: string; size: number; selected: boolean }) => {
+  const iconSize = size * 0.7
   
   return (
     <div 
-      className="flex items-center justify-center rounded-full transition-all duration-300"
+      className="flex items-center justify-center rounded-full transition-all duration-300 flex-shrink-0"
       style={{
-        width: faceSize,
-        height: faceSize,
+        width: size,
+        height: size,
         backgroundColor: selected ? '#fff' : color,
         border: selected ? `3px solid ${color}` : '3px solid transparent',
       }}
@@ -149,13 +148,9 @@ export default function FacesPainScale({ value, onChange, size = 'lg', readOnly 
     )
   }
 
-  const sizeClasses = {
-    sm: 50,
-    md: 70,
-    lg: 90
-  }
-
-  const faceSize = sizeClasses[size]
+  // Tamaños más pequeños en móvil para evitar solapamiento
+  const mobileFaceSize = size === 'lg' ? 50 : size === 'md' ? 45 : 40
+  const desktopFaceSize = size === 'lg' ? 90 : size === 'md' ? 70 : 50
 
   const isSelected = (faceValue: number) => {
     const closest = getClosestFace(normalizedValue)
@@ -166,7 +161,7 @@ export default function FacesPainScale({ value, onChange, size = 'lg', readOnly 
     <div className="space-y-4 sm:space-y-6">
       <h3 className="text-lg sm:text-xl font-bold text-gray-800 text-center">ESCALA DE MEDICIÓN DEL DOLOR</h3>
       
-      <div className="flex items-end justify-between gap-1 sm:gap-2 flex-wrap">
+      <div className="flex items-end justify-center gap-2 sm:gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {faces.map((face) => {
           const selected = isSelected(face.value)
           
@@ -175,10 +170,10 @@ export default function FacesPainScale({ value, onChange, size = 'lg', readOnly 
               key={face.value}
               type="button"
               disabled={readOnly || !onChange}
-              whileHover={!readOnly && onChange ? { scale: 1.1, y: -5 } : {}}
+              whileHover={!readOnly && onChange ? { scale: 1.05, y: -3 } : {}}
               whileTap={!readOnly && onChange ? { scale: 0.95 } : {}}
               onClick={() => onChange && onChange(face.value === 0 ? 1.0 : face.value)}
-              className={`flex-1 flex flex-col items-center p-2 sm:p-3 rounded-xl border-2 transition-all duration-300 touch-manipulation min-w-[44px] ${
+              className={`flex flex-col items-center p-1.5 sm:p-3 rounded-xl border-2 transition-all duration-300 touch-manipulation flex-shrink-0 ${
                 selected
                   ? 'shadow-xl scale-105 border-transparent'
                   : 'bg-white border-gray-200 hover:border-gray-300 hover:shadow-lg'
@@ -187,13 +182,28 @@ export default function FacesPainScale({ value, onChange, size = 'lg', readOnly 
                 backgroundColor: selected ? face.color : undefined,
               }}
             >
-              <div className="mb-2">
-                <PainFace Icon={face.Icon} color={face.color} size={faceSize} selected={selected} />
+              <div className="mb-1 sm:mb-2">
+                <div className="sm:hidden">
+                  <PainFace 
+                    Icon={face.Icon} 
+                    color={face.color}
+                    selected={selected}
+                    size={mobileFaceSize}
+                  />
+                </div>
+                <div className="hidden sm:block">
+                  <PainFace 
+                    Icon={face.Icon} 
+                    color={face.color}
+                    selected={selected}
+                    size={desktopFaceSize}
+                  />
+                </div>
               </div>
-              <span className={`text-xs sm:text-sm font-bold ${selected ? 'text-white' : 'text-gray-700'}`}>
+              <span className={`text-[10px] sm:text-sm font-bold ${selected ? 'text-white' : 'text-gray-700'}`}>
                 {face.value}
               </span>
-              <span className={`text-[10px] sm:text-xs mt-1 text-center ${selected ? 'text-white/90' : 'text-gray-600'}`}>
+              <span className={`text-[8px] sm:text-xs mt-0.5 sm:mt-1 text-center leading-tight ${selected ? 'text-white/90' : 'text-gray-600'}`}>
                 {face.label}
               </span>
             </motion.button>
@@ -260,7 +270,7 @@ export default function FacesPainScale({ value, onChange, size = 'lg', readOnly 
           <p className="text-xs sm:text-sm text-gray-600 mt-1">{getClosestFace(normalizedValue).description}</p>
         </div>
       )}
+      
     </div>
   )
 }
-
